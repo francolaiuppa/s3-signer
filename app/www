@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+'use strict';
+var http = require('http');
+var Raven = require('raven');
+var Express = require('express');
+var S3UploadPolicy = require('./index');
+var S3UploadPolicyGenerator = new S3UploadPolicy();
+
+var app = Express();
+// Setup Sentry.io error handler
+if (process.env.USE_RAVEN) {
+  Raven.config().install();
+}
+
+// Create HTTP server
+var port = process.env.PORT || '3001';
+app.set('port', port);
+var server = http.createServer(app);
+
+var router = new Express.Router();
+router.get('/',function(req,res) {
+  S3UploadPolicyGenerator.generate(req.query)
+    .then(function(data){
+      res.send(data);
+    })
+    .catch(req.error);
+});
+app.use(router);
+
+server.listen(port, function() {
+  console.log('Express server listening on port ' + server.address().port);
+});
+server.on('error', onError);
+server.on('listening', onListening);
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // Handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES': {
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    }
+    case 'EADDRINUSE': {
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    }
+    default: {
+      throw error;
+      break;
+    }
+  }
+}
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  console.log('Listening on ' + bind);
+}

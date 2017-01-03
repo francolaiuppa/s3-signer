@@ -1,0 +1,25 @@
+{
+  "name": "loveindustries-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "www",
+  "scripts": {
+    "start": "forever --spinSleepTime 10000 --minUptime 3000 -c 'nodemon --exitcrash' www",
+    "jscs": "jscs www index.js index.unit.js",
+    "test": "mocha --colors 'index.unit.js'"
+  },
+  "author": "Franco Laiuppa",
+  "license": "WTFPL",
+  "dependencies": {
+    "express": "^4.14.0",
+    "node-uuid": "^1.4.7",
+    "q": "^1.4.1",
+    "raven": "^1.1.1",
+    "s3-policy": "^0.2.0"
+  },
+  "devDependencies": {
+    "faker": "^3.1.0",
+    "mocha": "^3.2.0",
+    "should": "^11.1.2"
+  }
+}

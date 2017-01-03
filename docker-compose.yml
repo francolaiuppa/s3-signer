@@ -1,0 +1,9 @@
+version: '2'
+services:
+  s3signer:
+    build: ./app
+    ports:
+      - "3001:3001"
+    volumes:
+      - "./app:/usr/src/app"
+    env_file: "local.env"
