@@ -1,3 +1,6 @@
+# No longer maintained
+Although it still keeps working (2017-04-04) I'm no longer maintaining this repo.
+
 # S3 Signer
 Simple one-endpoint server to sign Amazon S3 File Upload policies so you can upload
 files to S3 using browser-side technologies.
